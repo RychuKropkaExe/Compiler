@@ -2,5 +2,5 @@
 #include <iostream>
 
 int main(){
-    std::cout << "Siema " << SIEMA_ENIU << "\n";
+    std::cout << "Siema ENIU" << SIEMA_ENIU << "\n";
 }
