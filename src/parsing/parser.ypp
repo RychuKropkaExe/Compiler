@@ -1,0 +1,136 @@
+%code requires { 
+    #include <fstream>
+    #include <iostream>
+    #include <list>
+    #include <string>
+    #include <cstdio>
+    int yyerror(std::list<std::string> &test, std::string s);
+}
+
+%union {int token;
+        long long int num;
+        std::string *id;}
+
+%code provides {
+    #define YY_DECL \
+        int yylex(std::list<std::string> &test)
+    YY_DECL;
+}
+
+%{
+    extern int yylineno;
+    extern FILE* yyin;
+    extern FILE* yyout;
+    #include "/home/rychu/Compiler/src/parsing/parser.hpp"
+%}
+
+%param {std::list<std::string> &test}
+
+%token <token> COMMENT_OPENING
+%token <token> COMMENT_CLOSE
+%token <token> COMMENT
+%token <token> NEWLINE_TOKEN
+%token <token> PROCEDURE
+%token <token> IS
+%token <token> VAR
+%token <token> BEGIN_TOKEN
+%token <token> END
+%token <token> PROGRAM
+%token <token> IF
+%token <token> THEN
+%token <token> ELSE
+%token <token> ENDIF
+%token <token> WHILE
+%token <token> DO
+%token <token> ENDWHILE
+%token <token> REPEAT
+%token <token> UNTIL
+%token <token> READ
+%token <token> WRITE
+%token <num> NUM
+%token <id> IDENTIFIER
+%token <token> GT
+%token <token> LT 
+%token <token> GEQ
+%token <token> LEQ
+%token <token> ASSIGN
+%token <token> EQ
+%token <token> NEQ
+%token <token> COMMAND_END
+%token <token> DOT
+%token <token> OP_BRACKET
+%token <token> CL_BRACKET
+%token <token> MODULO
+%token <token> ADD
+%token <token> SUB
+%token <token> MUL
+%token <token> DIV
+%token <token> POW
+
+%type <id> value;
+%type <id> expression;
+%type <id> condition;
+%type <id> command;
+%type <id> declarations;
+%type <id> proc_head;
+%type <id> commands;
+%type <id> procedures;
+%type <id> main;
+
+%%
+program: PROGRAM
+program_all  : procedures main
+            | main
+
+procedures   : procedures PROCEDURE proc_head IS VAR declarations BEGIN_TOKEN commands END
+             | procedures PROCEDURE proc_head IS BEGIN_TOKEN commands END
+             | PROCEDURE proc_head IS BEGIN_TOKEN commands END
+             | PROCEDURE proc_head IS VAR declarations BEGIN_TOKEN commands END
+
+main         : PROGRAM IS VAR declarations BEGIN_TOKEN commands END
+             | PROGRAM IS BEGIN_TOKEN commands END
+
+commands     : commands command
+             | command
+command      : IDENTIFIER ASSIGN expression COMMAND_END
+             | IF condition THEN commands ELSE commands ENDIF
+             | IF condition THEN commands ENDIF
+             | WHILE condition DO commands ENDWHILE
+             | REPEAT commands UNTIL condition COMMAND_END
+             | proc_head COMMAND_END
+             | READ IDENTIFIER COMMAND_END
+             | WRITE value COMMAND_END
+
+proc_head    : IDENTIFIER OP_BRACKET declarations CL_BRACKET
+
+declarations : declarations DOT IDENTIFIER
+             | IDENTIFIER
+
+expression   : value
+             | value ADD value
+             | value SUB value
+             | value MUL value
+             | value DIV value
+             | value MODULO value
+
+condition    : value EQ value
+             | value NEQ value
+             | value GT value
+             | value LT value
+             | value GEQ value
+             | value LEQ value
+
+value        : NUM
+             | IDENTIFIER
+%%
+
+int yyerror(std::string s){
+    return 0;
+}
+
+void run_parser(FILE *file, std::list<std::string> &test)
+{
+    yyin = file;
+
+    yyparse(test);
+}
