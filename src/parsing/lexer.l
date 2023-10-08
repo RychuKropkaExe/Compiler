@@ -1,6 +1,6 @@
 %{
-    #include "/home/rychu/Compiler/src/parsing/parser.hpp"
-    #include <list>
+    #include "parser.hpp"
+    #include <vector>
     int line_num = 1;
     bool comment = false;
 %}

@@ -1,9 +1,9 @@
 #include "../headers/symbolTable.hpp"
 #include <iostream>
-#include <list>
+#include <vector>
 #include <string>
 
-extern void run_parser(FILE *file, std::list<std::string> test);
+extern void run_parser(FILE *file, std::vector<std::string> &test);
 
 int main(int argc, char** argv){
 
@@ -11,8 +11,7 @@ int main(int argc, char** argv){
         printf("No path provided\n");
         return 0;
     }
-
-    run_parser(NULL, std::list<std::string>());
-    
+    std::vector<std::string> testList;
+    run_parser(NULL, testList);
 
 }

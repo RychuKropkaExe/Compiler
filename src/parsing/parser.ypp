@@ -1,10 +1,10 @@
 %code requires { 
     #include <fstream>
     #include <iostream>
-    #include <list>
+    #include <vector>
     #include <string>
     #include <cstdio>
-    int yyerror(std::list<std::string> &test, std::string s);
+    int yyerror(std::vector<std::string> &test, std::string s);
 }
 
 %union {int token;
@@ -13,7 +13,7 @@
 
 %code provides {
     #define YY_DECL \
-        int yylex(std::list<std::string> &test)
+        int yylex(std::vector<std::string> &test)
     YY_DECL;
 }
 
@@ -21,10 +21,10 @@
     extern int yylineno;
     extern FILE* yyin;
     extern FILE* yyout;
-    #include "/home/rychu/Compiler/src/parsing/parser.hpp"
+    #include "parser.hpp"
 %}
 
-%param {std::list<std::string> &test}
+%param {std::vector<std::string> &test}
 
 %token <token> COMMENT_OPENING
 %token <token> COMMENT_CLOSE
@@ -124,11 +124,12 @@ value        : NUM
              | IDENTIFIER
 %%
 
-int yyerror(std::string s){
+int yyerror(std::vector<std::string> &test, std::string s)
+{
     return 0;
 }
 
-void run_parser(FILE *file, std::list<std::string> &test)
+void run_parser(FILE *file, std::vector<std::string> &test)
 {
     yyin = file;
 

@@ -1,1 +1,4 @@
 bazel*
+.vscode
+src/parsing/*.cpp
+src/parsing/*hpp
