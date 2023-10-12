@@ -3,4 +3,5 @@ cc_library(
     srcs = ["parser.cpp", "lexer.cpp"],
     hdrs = ["parser.hpp"],
     visibility = ["//visibility:public"],
+    deps = ["//src/debug:debug"],
 )

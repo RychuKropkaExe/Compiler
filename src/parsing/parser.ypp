@@ -78,7 +78,7 @@
 %type <id> main;
 
 %%
-program: PROGRAM
+
 program_all  : procedures main
             | main
 
@@ -132,6 +132,5 @@ int yyerror(std::vector<std::string> &test, std::string s)
 void run_parser(FILE *file, std::vector<std::string> &test)
 {
     yyin = file;
-
     yyparse(test);
 }

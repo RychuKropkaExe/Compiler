@@ -1,5 +1,6 @@
 %{
     #include "parser.hpp"
+    #include "logFunctions.h"
     #include <vector>
     int line_num = 1;
     bool comment = false;
@@ -12,90 +13,90 @@
 
 \n line_num++;
 
-"[" return COMMENT_OPENING;
-"]" return COMMENT_CLOSE;
+"[" RETURN_TOKEN(COMMENT_OPENING, yytext)
+"]" RETURN_TOKEN(COMMENT_CLOSE, yytext)
 
 " " 
 
 \t 
 
-\% return MODULO;
+\% RETURN_TOKEN(MODULO, yytext)
 
-"(" return OP_BRACKET;
+"(" RETURN_TOKEN(OP_BRACKET, yytext)
 
-")" return CL_BRACKET;
+")" RETURN_TOKEN(CL_BRACKET, yytext)
 
-"," return DOT;
+"," RETURN_TOKEN(DOT, yytext)
 
-":=" return ASSIGN;
+":=" RETURN_TOKEN(ASSIGN, yytext)
 
-"<=" return LEQ;
+"<=" RETURN_TOKEN(LEQ, yytext)
 
-">=" return GEQ;
+">=" RETURN_TOKEN(GEQ, yytext)
 
-"<" return LT;
+"<" RETURN_TOKEN(LT, yytext)
 
-">" return GT;
+">" RETURN_TOKEN(GT, yytext)
 
-"!=" return NEQ;
+"!=" RETURN_TOKEN(NEQ, yytext)
 
-"=" return EQ;
+"=" RETURN_TOKEN(EQ, yytext)
 
-";" return COMMAND_END;
+";" RETURN_TOKEN(COMMAND_END, yytext)
 
-"+" return ADD;
+"+" RETURN_TOKEN(ADD, yytext)
 
-"-" return SUB;
+"-" RETURN_TOKEN(SUB, yytext)
 
-"*" return MUL;
+"*" RETURN_TOKEN(MUL, yytext)
 
-"/" return DIV;
+"/" RETURN_TOKEN(DIV, yytext)
 
-"^" return POW;
+"^" RETURN_TOKEN(POW, yytext)
 
-"PROCEDURE" return PROCEDURE;
+"PROCEDURE" RETURN_TOKEN(PROCEDURE, yytext)
 
-"IS" return IS; 
+"IS" RETURN_TOKEN(IS, yytext) 
 
-"VAR" return VAR;
+"VAR" RETURN_TOKEN(VAR, yytext)
 
-"BEGIN" return BEGIN_TOKEN;
+"BEGIN" RETURN_TOKEN(BEGIN_TOKEN, yytext)
 
-"ENDIF" return ENDIF;
+"ENDIF" RETURN_TOKEN(ENDIF, yytext)
 
-"ENDWHILE" return ENDWHILE;
+"ENDWHILE" RETURN_TOKEN(ENDWHILE, yytext)
 
-"END" return END;
+"END" RETURN_TOKEN(END, yytext)
 
-"PROGRAM" return PROGRAM;
+"PROGRAM" RETURN_TOKEN(PROGRAM, yytext)
 
-"IF" return IF;
+"IF" RETURN_TOKEN(IF, yytext)
 
-"THEN" return THEN;
+"THEN" RETURN_TOKEN(THEN, yytext)
 
-"ELSE" return ELSE;
+"ELSE" RETURN_TOKEN(ELSE, yytext)
 
-"WHILE" return WHILE;
+"WHILE" RETURN_TOKEN(WHILE, yytext)
 
-"DO" return DO;
+"DO" RETURN_TOKEN(DO, yytext)
 
-"REPEAT" return REPEAT;
+"REPEAT" RETURN_TOKEN(REPEAT, yytext)
 
-"UNTIL" return UNTIL;
+"UNTIL" RETURN_TOKEN(UNTIL, yytext)
 
-"READ" return READ;
+"READ" RETURN_TOKEN(READ, yytext)
 
-"WRITE" return WRITE;
+"WRITE" RETURN_TOKEN(WRITE, yytext)
 
 [0-9]+ {if(!comment){
         yylval.num = atoll(yytext);
-        std::cout << yytext;
+        LOG_PRINT(INFO_PRINT, "Lexer Token: " << yytext);
         return NUM;
     };}
 
 [_a-z]+ {if(!comment){
     yylval.id = new std::string(yytext, yyleng);
-    std::cout << yytext;
+    LOG_PRINT(INFO_PRINT, "Lexer Token: " << yytext);
     return IDENTIFIER;
     };}
 
