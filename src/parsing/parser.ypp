@@ -4,6 +4,7 @@
     #include <vector>
     #include <string>
     #include <cstdio>
+    #include "logFunctions.h"
     int yyerror(std::vector<std::string> &test, std::string s);
 }
 
@@ -126,7 +127,7 @@ value        : NUM
 
 int yyerror(std::vector<std::string> &test, std::string s)
 {
-    return 0;
+    LOG_PRINT(ERROR_PRINT, s);
 }
 
 void run_parser(FILE *file, std::vector<std::string> &test)
